@@ -1,15 +1,25 @@
+const {exec} = require("node:child_process");
+
 let response;
 
-exports.handler = async (event, context) =>
-{
+exports.handler = async(event, context) => {
     try{
-        response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: "Hello Marketplace!",
-            }),
-        };
-    } catch (err){
+        exec("ls -al", (err, stdout, stderr) =>{
+            if (err) {
+                throw Error('error: ${err.message}');
+            }
+            if (stderr) {
+                console.log('stderr: ${stderr}');
+            }
+            
+            response = {
+                statusCode: 200,
+                body: JSON.stringfy({
+                    message: "Hello Marketplace!",
+                }),
+            };
+        });
+    } catch (err) {
         console.log(err);
         return err;
     }
